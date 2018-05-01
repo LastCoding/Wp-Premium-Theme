@@ -35,7 +35,14 @@ function register_settings( $group, $options = array() ) {
 
 function sunset_custom_settings() {
 	$group   = 'sunset-settings-group';
-	$options = [ 'first_name', 'last_name', 'user_description', 'facebook_handler', 'gplus_handler' ];
+	$options = [
+		'profile_picture',
+		'first_name',
+		'last_name',
+		'user_description',
+		'facebook_handler',
+		'gplus_handler'
+	];
 
 	register_settings( $group, $options );
 
@@ -43,6 +50,8 @@ function sunset_custom_settings() {
 
 	register_setting( 'sunset-settings-group', 'twitter_handler', 'sunset_sanitize_twitter_handler' );
 	add_settings_section( 'sunset-sidebar-options', 'Sidebar Options', 'sunset_sidebar_options', 'alecadd_sunset' );
+
+	add_settings_field( 'sidebar-profile-picture', 'Profile Picture', 'sunset_sidebar_profile', 'alecadd_sunset', 'sunset-sidebar-options' );
 
 	$args = format_myArgs( 'first_name', 'text', 'First Name' );
 
@@ -74,8 +83,12 @@ function sunset_sidebar_options() {
 	echo 'Customize your Sidebar Information';
 }
 
+function sunset_sidebar_profile() {
+	$picture = esc_attr( get_option( 'profile_picture' ) );
+	echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button"><input type="hidden" id="profile_picture" name="profile_picture" value="' . $picture . '">';
+}
 
-function format_myArgs( $name, $type, $placeholder, $desc = false ) {
+function format_myArgs( $name, $type, $placeholder = false, $desc = false ) {
 	return array(
 		'name'        => $name,
 		'type'        => $type,
